@@ -1,20 +1,27 @@
 import Stripe from "stripe";
 
-const API_KEY = process.env.STRIPE_SECRET_KEY;
+// Try both environment variable approaches for compatibility
+const API_KEY = process.env.STRIPE_SECRET_KEY || process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY;
 
 export async function POST(request) {
     try {
         console.log('=== CHECKOUT DEBUG ===');
-        console.log('API Key exists:', !!API_KEY);
-        console.log('API Key starts with:', API_KEY ? API_KEY.substring(0, 7) + '...' : 'undefined');
+        console.log('STRIPE_SECRET_KEY exists:', !!process.env.STRIPE_SECRET_KEY);
+        console.log('NEXT_PUBLIC_STRIPE_SECRET_KEY exists:', !!process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY);
+        console.log('Using API Key starts with:', API_KEY ? API_KEY.substring(0, 7) + '...' : 'undefined');
+        console.log('Environment:', process.env.NODE_ENV);
 
         // Check if API key exists
         if (!API_KEY) {
-            console.error('STRIPE_SECRET_KEY not found in environment variables');
+            console.error('No Stripe API key found in environment variables');
             return Response.json(
                 { 
                     error: 'Stripe not configured',
-                    debug: 'STRIPE_SECRET_KEY environment variable is missing'
+                    debug: {
+                        hasStripeSecretKey: !!process.env.STRIPE_SECRET_KEY,
+                        hasNextPublicStripeKey: !!process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY,
+                        environment: process.env.NODE_ENV
+                    }
                 }, 
                 { status: 500 }
             );
@@ -56,7 +63,6 @@ export async function POST(request) {
         console.error('Error message:', err.message);
         console.error('Error type:', err.type);
         console.error('Error code:', err.code);
-        console.error('Full error:', err);
         console.error('=== END ERROR ===');
 
         return Response.json(
