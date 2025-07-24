@@ -4,42 +4,53 @@ import { useProducts } from "@/components/ProductContent"
 import Link from "next/link"
 
 
-export default function CartPage() {
-  const router = useRouter();
-  const{cart,handleIncrementProduct}= useProducts(); // Importing cart from ProductsContext
-      async function createCheckout() {
-        try {
-            const baseURL = process.env.NEXT_PUBLIC_BASE_URL
-            const lineItems = Object.keys(cart).map((item, itemIndex) => {
-                return {
-                    price: item,
-                    quantity: cart[item].quantity
-                }
-            })
-
-            const response = await fetch(baseURL + '/api/checkout', {
-                method: 'POST',
-                headers: {
-                    'Content-type': 'application/json'
-                },
-                body: JSON.stringify({ lineItems })
-            })
-            const data = await response.json()
-            if (response.ok) {
-                try {
-                    console.log('Checkout session created successfully:', data);
-                } catch (error) {
-                    console.error('Error logging checkout session:', error);
-                }
-               
-                router.push(data.url)
+async function createCheckout() {
+    try {
+        const baseURL = process.env.NEXT_PUBLIC_BASE_URL
+        const lineItems = Object.keys(cart).map((item, itemIndex) => {
+            return {
+                price: item,
+                quantity: cart[item].quantity
             }
-        } catch (err) {
-            console.log('Error creating checkout', err.message)
+        })
+
+        const response = await fetch(baseURL + '/api/checkout', {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({ lineItems })
+        })
+
+        // Check if response is ok
+        if (!response.ok) {
+            console.error('Checkout API error:', response.status, response.statusText);
+            alert('Checkout failed. Please try again.');
+            return;
         }
+
+        // Check if response is JSON
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+            console.error('API returned non-JSON response');
+            alert('Server error. Please try again.');
+            return;
+        }
+
+        const data = await response.json();
+        
+        if (data.url) {
+            router.push(data.url);
+        } else {
+            console.error('No checkout URL received:', data);
+            alert('Checkout failed. Please try again.');
+        }
+        
+    } catch (err) {
+        console.log('Error creating checkout:', err.message);
+        alert('Checkout failed. Please try again.');
     }
-
-
+}
 
 
    const total = Object.keys(cart).reduce((acc, curr) => {
