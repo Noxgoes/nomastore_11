@@ -32,7 +32,7 @@ export default function Products(props) {
  
                 <div className="planner-container">{/* i have used poster isntead of planner */}
                     <div>
-                        <button  onClick={()=>{setPortalImage('poster')}} className="img-button2">
+                        <button  onClick={()=>{setPortalImage('poster')}} className="img-button">
                             <img src="mid_res/poster.jpg" alt="low-res-planner" />
                         </button>{/*so its clickable the image */}
                     </div>
