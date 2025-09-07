@@ -165,6 +165,7 @@ main,
 
 .planner-container>div:first-of-type {
     position: relative;
+    
 }
 
 .planner-container>div:first-of-type img {
@@ -403,8 +404,8 @@ footer .links-container>div {
     border-radius: none;
 }
 .img-button2 {
-  width: 80vh;   /* your desired width */
-  height: 80vh;  /* your desired height */
+  max-width: 80vh;   /* your desired width */
+  max-height: 80vh;  /* your desired height */
   object-fit: cover;
   
   padding: 1rem;
@@ -463,6 +464,9 @@ footer .links-container>div {
     .cart-item {
         gap: 2rem;
     }
+    .img-button2{
+        padding: 30px;
+    }
 }
 
 @media (min-width: 768px) {
@@ -470,7 +474,10 @@ footer .links-container>div {
         grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 
-
+    .img-button{
+        padding: 30px;
+        
+    }
     footer {
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 2rem;
@@ -500,7 +507,10 @@ footer .links-container>div {
     footer .links-container {
         grid-template-columns: repeat(3, minmax(0, 1fr));
     }
-    
+    .img-button{
+        padding: 30px;
+        
+    }
 
     .cart-button {
         font-size: 2.4rem;
