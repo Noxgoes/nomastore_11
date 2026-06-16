@@ -28,7 +28,7 @@ export default function RootLayout({ children }) {
                 <Link href={"/"}> <h1>Nomastore</h1>
                 </Link>
 
-                <h5 className="mid-text"> JERSEYS YOU WILL SWEAT YO ASS FOR</h5>
+                <h5 className="mid-text"> JERSEYS YOU WILL BREAK THE BANK FOR</h5>
                 <Cart/>
               </div>
             
